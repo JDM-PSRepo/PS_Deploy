@@ -1,0 +1,1 @@
+﻿#RemoveWinVerifyTrustV2
