@@ -1,4 +1,4 @@
-﻿#PS_Function v1.0 | Good lord this thing is important, and stop reading my comments and GET OFF MY LAWN!!!!!!!
+﻿#PS_Function v2.0 | Good lord this thing is important, and stop reading my comments and GET OFF MY LAWN!!!!!!!
 #Long story short this establishes a crud ton of functions that everything else needs so if you mess with it i'll bury you alive in a pile of rusty fillet knives
 #Use this to get a value for a catch block by the way: $_.Exception.GetType().FullName
 
@@ -8,7 +8,7 @@ Function Log-Name{
     $currentUser = WhoAmI #Grabs Username
     $hostDevice = Hostname #Grabs Machine Name
     $date = get-date -f 'MM-dd-yyyy a\t HH_mm' #Writes the name in a file friendly format
-    $logPath = "PS_DEPLOY-$hostDevice-$date.txt" #Dynamically generates a log name on execute
+    $logPath = "%temp%\PS_DEPLOY\PS_DEPLOY-$hostDevice-$date.txt" #Dynamically generates a log name on execute - Updated to use %temp% because we dont suck
 
     #Passes back the log file name
     return $logPath
@@ -90,10 +90,13 @@ Function Input-PromptRange($inputText, $minInput, $maxInput){
     
 }
 
+#TODO: REBUILD THIS TO TAKE IN A FILE AND A FILE PATH FILE NAME INSTEAD OF JUST AN ARRAY OF STRINGS
 #Given an array of options the system will print them with alternating colors and then call Input-PromptRange to parse the response
 Function Output-DisplayOptions($displayPrompt, $optionsArray, $specialMessage){
     #Counter to keep track
     $counter = 1
+	
+	#TODO: ADD THE RESPECTIVE VARIABLES NEEDED TO READ IN FROM A FILE 
 
     #Display prompt, and iterate through the option array
     Write-Host $DisplayPrompt -ForegroundColor DarkCyan
@@ -113,7 +116,9 @@ Function Output-DisplayOptions($displayPrompt, $optionsArray, $specialMessage){
     return $userResp
 }
 
+
 #Adds a Hive to the Registry, Returns True if successful, False otherwise
+#Does not create values
 Function Modify-RegHive($hivePath, $hiveName){
     #Add ORL Hive
     try{New-Item -Path $hivePath -name $hiveName -ErrorAction Stop;Log-Alert -message "$hiveName Hive Added" -severity -2}
@@ -129,9 +134,8 @@ Function Modify-RegHive($hivePath, $hiveName){
     return $true
 }
 
-#Modifies or Adds a registry value based on given paremeters | Returns True if successful, returns False if failed
+#Modifies or Adds a registry value based on given paremeters | Returns True if successful, returns False if failed | FAILS IF THE REGISTRY PATH DOESNT EXIST, USE Modify-RegHive FOR THAT!
 Function Modify-RegValue($regPath, $regName, $regValue, $regProperty){
-
 
     if(Test-Path $regPath){
         
@@ -281,6 +285,11 @@ Function User-AddAdmin($definedName, $securePass, $descUser){
     return $true
 }
 
+
+
+# Legacy code, none of this should be used but kept
+
+<#
 Function Add-AutologBypass($autoUser, $autoPass){
 
     #User Defined Variables. Dont mess with these unless you want to change something
@@ -428,4 +437,5 @@ Function Add-Autolog($autoUser, $autoPass){
     if($regTotal){return $true}
     return $false
 }
+#>
 

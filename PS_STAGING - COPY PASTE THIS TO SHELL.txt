@@ -1,1 +1,0 @@
-New-PSDrive -Name "PS_Deploy" -PSProvider "FileSystem" -Root "\\HVAC-DATA\IT\STAGING" -Credential (WhoAmI) | Out-Null;PS_Deploy:\PS_DEPLOY_V2.ps1
