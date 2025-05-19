@@ -39,6 +39,11 @@ try{
         #If it does not exist, create it
         New-Item -Path $TEMP\PS_DEPLOY -ItemType Directory -Force
     }
+    else{
+        #If it does exist, remove it and create a new one, otherwise this creates version mismatch problems
+        Remove-Item -Path $TEMP\PS_DEPLOY -Recurse -Force
+        New-Item -Path $TEMP\PS_DEPLOY -ItemType Directory -Force
+    }
 }
 catch{
     Write-Host "Unable to create the PS_DEPLOY directory in TEMP! This is bad news!" -ForegroundColor DarkRed
@@ -50,7 +55,7 @@ catch{
 #Pull the repository down to the local machine as a zip file and extract it
 try{
     #Download the zip file
-    Invoke-WebRequest -Uri "https://github.com/JDM-PSRepo/PS_Deploy/archive/refs/heads/main.zip" -OutFile $TEMP\PS_DEPLOY\PS_DEPLOY.zip
+    Invoke-WebRequest -Uri "https://github.com/JDM-PSRepo/PS_Deploy/archive/refs/heads/main.zip" -OutFile $TEMP\PS_DEPLOY\PS_DEPLOY.zip 
     #Extract the zip file
     Expand-Archive -Path $TEMP\PS_DEPLOY\PS_DEPLOY.zip -DestinationPath $TEMP\PS_DEPLOY -ErrorAction Stop
     #Remove the zip file, if this fails we dont care
@@ -70,7 +75,7 @@ try{
     Set-Location $TEMP\PS_DEPLOY\PS_Deploy-main\ #Swap to the PS_Deploy Folder directly
 
     #Dot inclusion is critical, you cant run anything until then
-    Import-Module .\Library\PS_Function.ps1 #Dot Include the PS_Function System
+    . .\Library\PS_Function.ps1 #Dot Include the PS_Function System
     
     #Bind a Global Log so we can properly make use of our logging tools immedeatly
 }
