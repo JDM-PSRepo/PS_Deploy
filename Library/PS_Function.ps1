@@ -22,19 +22,19 @@ Function New-LogMessage($message,$severity){
     
     #Decide based on severity
     switch($severity){
-       -2 {Write-Host $message -ForegroundColor DarkGreen;$message >> .\Logs\$GLOBAL_LOGPATH;break} #Success
-       -1 {$message >> .\Logs\$GLOBAL_LOGPATH;break} #Silent Log, Clean Logs there is no reason to keep them
-        0 {$message >> .\Logs\$GLOBAL_LOGPATH;break} #Silent Log, Bypass Log Clearer, there could be something that goes Awry
-        1 {Write-Host $message -ForegroundColor Yellow; $message >> .\Logs\$GLOBAL_LOGPATH;break} #General Notice
-        2 {Write-Host $message -ForegroundColor DarkYellow; $message >> .\Logs\$GLOBAL_LOGPATH;break} #Minor Issue
-        3 {Write-Host $message -ForegroundColor Red; $message >> .\Logs\$GLOBAL_LOGPATH;break} #Medium Issue
-        4 {Write-Host $message -ForegroundColor DarkRed; $message >> .\Logs\$GLOBAL_LOGPATH;$Error >> .\Logs\$GLOBAL_LOGPATH;break} #High level Issue
-        5 {for(($i=0);$i -lt 3;$i++){Write-Host $message -ForegroundColor DarkRed -BackgroundColor Black}; $message >> .\Logs\$GLOBAL_LOGPATH;$Error >> .\Logs\$GLOBAL_LOGPATH;break} #F***!!!!!!!!!
+       -2 {Write-Host $message -ForegroundColor DarkGreen;$message >> $GLOBAL_LOGPATH;break} #Success
+       -1 {$message >> $GLOBAL_LOGPATH;break} #Silent Log, Clean Logs there is no reason to keep them
+        0 {$message >> $GLOBAL_LOGPATH;break} #Silent Log, Bypass Log Clearer, there could be something that goes Awry
+        1 {Write-Host $message -ForegroundColor Yellow; $message >> $GLOBAL_LOGPATH;break} #General Notice
+        2 {Write-Host $message -ForegroundColor DarkYellow; $message >> $GLOBAL_LOGPATH;break} #Minor Issue
+        3 {Write-Host $message -ForegroundColor Red; $message >> $GLOBAL_LOGPATH;break} #Medium Issue
+        4 {Write-Host $message -ForegroundColor DarkRed; $message >> $GLOBAL_LOGPATH;$Error >> $GLOBAL_LOGPATH;break} #High level Issue
+        5 {for(($i=0);$i -lt 3;$i++){Write-Host $message -ForegroundColor DarkRed -BackgroundColor Black}; $message >> $GLOBAL_LOGPATH;$Error >> $GLOBAL_LOGPATH;break} #F***!!!!!!!!!
         default { #Bug detected, throw an error
             Write-Host $message -ForegroundColor DarkMagenta
             Write-Host "Warning! A categorization error has occured! Check whatever called New-LogMessage for $logPath" -ForegroundColor DarkRed
-            $message >> .\Logs\$GLOBAL_LOGPATH
-            "^^^^^CATEGORIZATION ERROR WITH A VALUE OF $severity OCCURED HERE^^^^^" >> .\Logs\$GLOBAL_LOGPATH
+            $message >> $GLOBAL_LOGPATH
+            "^^^^^CATEGORIZATION ERROR WITH A VALUE OF $severity OCCURED HERE^^^^^" >> $GLOBAL_LOGPATH
         }
     }
 
