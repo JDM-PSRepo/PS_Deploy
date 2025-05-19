@@ -8,7 +8,7 @@ Function New-LogName{
     #Create a log path name and set the variable so that we can make use of it later
     $hostDevice = Hostname #Grabs Machine Name
     $date = get-date -f 'MM-dd-yyyy a\t HH_mm' #Writes the name in a file friendly format
-    $logPath = "$TEMP\PS_DEPLOY\Logs\PS_DEPLOY-$hostDevice-$date.txt" #Dynamically generates a log name on execute - Updated to use %temp% because we dont suck
+    $logPath = "$TEMP\PS_DEPLOY\PS_DEPLOY-main\Logs\PS_DEPLOY-$hostDevice-$date.txt" #Dynamically generates a log name on execute - Updated to use %temp% because we dont suck
 
     #Passes back the log file name
     return $logPath
