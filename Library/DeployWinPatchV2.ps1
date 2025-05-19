@@ -5,7 +5,7 @@
 $LOW_BOUND = 2500000 #Lowest KB#
 $HIGH_BOUND = 6500000 #Highest KB#
 $BREAKOUT = -1 #Breakout Flag, do not adjust this or you screw everything up and it cant ever exit the input loop
-$MAX_FAIL = 5 #Up to 5 bad inputs can be put in before the shell kills itself, this can be adjusted up or down as needed
+#$MAX_FAIL = 5 #Max Failures, this is a holdover from the old code. I dont think it will be needed but its here just in case
 
 #Variables
 $iterator = 0 #Keep this as zero for later
@@ -22,7 +22,7 @@ $Error.Clear() #Just double check that the logging system is clear
 
 try{
     #Swap to the WinPatch directory
-    cd PS_Deploy:\WinPatch -ErrorAction Stop
+    Set-Location PS_Deploy:\WinPatch -ErrorAction Stop
 }
 
 #If that fails, scream from the rooftops and nope out
@@ -30,7 +30,7 @@ catch{
     Log-Alert -message "Something went horribly wrong! Was unable to bind WinPatch database in the PS_Deploy Folder on the network! This is pretty bad news. Did the file get renamed?! Exiting now!" -severity 5
     pause #Hold temporarily before killing the shell
     #Disconnect the Drive
-    cd C:\
+    Set-Location C:\
     remove-psdrive "PS_Deploy" -Force
     #Kill the instance
     exit
@@ -80,7 +80,7 @@ while($BREAKOUT -ne $lastInput){
                 while($recurseInput -ne $BREAKOUT){
 
                 #Print the child items, but only the names, if you dont put the "Out-Host" this breaks completely
-                Write-Output (Get-ChildItem .\$lastInput | Select Name) | Out-Host
+                Write-Output (Get-ChildItem .\$lastInput | Select-Object Name) | Out-Host
 
                     #Seek new input from user on Sub KB
                     $recurseInput = Read-Host -Prompt 'Please Input your selection or do -1 to cancel'
@@ -218,6 +218,6 @@ foreach($completed in $KBCompletion) {
 }
 
 #Leave the WinPatch folder to not cause trouble with other scripts
-cd PS_DEPLOY:\
+Set-Location PS_DEPLOY:\
 #Job's done
 Write-Host "Work is complete, returning to deployer"
